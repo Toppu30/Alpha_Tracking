@@ -1,8 +1,6 @@
 from django.urls import path
-from .views import RegisterView, CaptureFaceView, manager_dashboard, member_delete, member_edit, member_list, success, FaceDetectionView, home, CustomLoginView, register_user, user_detail
-# from django.views.generic import TemplateView
+from .views import *
 from django.contrib.auth import views as auth_views
-# from . import views
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),

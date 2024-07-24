@@ -19,9 +19,11 @@ body {
     background: #2D2C2F;
     color: #ffffff;
     font-family: "Noto Sans", sans-serif;
+    overflow: hidden;
 }
 
 nav {
+    width: 85vw;
     height: 10vh;
     background: linear-gradient(180deg,#706EFB, #2d2c2f);
 }
@@ -35,7 +37,13 @@ footer {
     color: #ffffff;
     position: absolute;
     bottom: 0;
-    width: 100%;
+    width: 85vw;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
 }
 
 .login-container {
@@ -132,17 +140,16 @@ footer {
 
 /* Sidebar */
 .sidebar {
-    /* position: fixed; */
-    width: 15%;
-    height: 100%;
+    /* width: 40vh; */
+    min-width: 15vw;
+    height: 100vh;
     padding: 30px;
-    left: 0;
-    top: 0;
     display: flex;
     flex-direction: column;
-    min-width: 20vh;
     background: #19181c;
     color: #ffffff;
+    align-items: center;
+    box-sizing: border-box;
 }
 
 .sidebar .logo {
@@ -151,7 +158,7 @@ footer {
 }
 
 .sidebar img {
-    width: 75%; 
+    width: 100%; 
     margin-left: auto;
     margin-right: auto;
 }
@@ -161,7 +168,7 @@ footer {
     background: linear-gradient(#19181c, #19181c) padding-box, linear-gradient(180deg, #706EFB, #f93f64) border-box;
     border-radius: 3vh;
     border: 1.5px solid transparent;
-    margin-bottom: 15%;
+    margin-bottom: 2.5vh;
     display: flex;
     align-items: center;
     padding: 15px 20px;
@@ -205,24 +212,26 @@ footer {
     flex-direction: column;
 }
 
-.sidebar-menu a, button {
+.sidebar-menu a,.sidebar-menu button {
     width: 100%;
     padding: 10px;
     border-radius: 10px;
     color: #ffffff;
     background-color: #1e1e1e;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     border: none;
     cursor: pointer;
     display: flex;
     align-items: center;
+    font-size: 16px;
+    transition: 300ms;
 }
 
 .sidebar-menu a i, .sidebar-menu button i {
-    margin-right: 10px;
+    margin-right: 20px;
 }
 
-.sidebar-menu a:hover, button:hover {
+.sidebar-menu a:hover,.sidebar-menu button:hover {
     background-color: #333;
 }
 
@@ -235,6 +244,7 @@ footer {
 
 .sidebar-menu a:hover + .submenu, .submenu:hover {
     display: flex;
+    transition: 1000ms;
 }
 
 .submenu a {
@@ -309,6 +319,62 @@ footer {
     font-size: 0.8em;
 }
 
-h2, h3 {
-    color: #333;
+.left-panel, .right-panel {
+    flex: 1;
+    padding: 20px;
+}
+.right-panel {
+    border-left: 2px solid #ccc;
+}
+.video-container {
+    position: relative;
+}
+.video-container video {
+    width: 100%;
+}
+.video-container canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.result {
+    margin-top: 20px;
+}
+.result img {
+    max-width: 100px;
+}
+.result .title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+.button:disabled {
+    background-color: #cccccc;
+}
+
+.box-form {
+    min-height: 70vh;
+    margin-top: 20px;
+    margin-left: 3vw;
+    padding: 40px;
+    background: linear-gradient(#19181c, #19181c) padding-box, linear-gradient(180deg, #706EFB, #f93f64) border-box;
+    border-radius: 2.5vh;
+    border: 1.5px solid transparent;
+    color: #fff;
+}
+
+.register-from input {
+    width: 20vw;
+    padding: 10px;
+    border: 2px solid #706EFB;
+    border-radius: 15px;
+    background-color: #fff;
+    color: #19181c;
 }

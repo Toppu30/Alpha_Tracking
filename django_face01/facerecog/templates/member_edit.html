@@ -2,17 +2,85 @@
 <html>
 <head>
     <title>Edit Member</title>
+    <style>
+        #camera-container {
+            display: none;
+        }
+        #current-image img {
+            max-width: 200px;
+            max-height: 200px;
+        }
+    </style>
 </head>
 <body>
     <h2>Edit Member</h2>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.non_field_errors }}
+        <div>
+            <label for="name">Name:</label>
+            {{ form.name }}
+        </div>
+        <div>
+            <label for="number">Number:</label>
+            {{ form.number }}
+        </div>
+        <input type="hidden" name="faceimage" id="faceimage">  <!-- เปลี่ยน id เป็น 'faceimage' -->
         <button type="submit">Save</button>
     </form>
-    {% if member.faceimage %}
-        <h3>Current Face Image:</h3>
-        <img src="{{ member.faceimage.url }}" alt="{{ member.name }}" style="max-width: 200px; max-height: 200px;">
-    {% endif %}
+
+    <div id="current-image">
+        {% if member.faceimage %}
+            <h3>Current Face Image:</h3>
+            <img src="{{ member.faceimage.url }}" alt="{{ member.name }}">
+        {% endif %}
+    </div>
+
+    <h3>Take a New Photo</h3>
+    <button id="start-camera">ถ่ายใหม่</button>
+    <div id="camera-container">
+        <video id="video" width="320" height="240" autoplay></video>
+        <button id="snap">Snap Photo</button>
+        <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
+    </div>
+
+    <script>
+        // Get elements
+        var video = document.getElementById('video');
+        var cameraContainer = document.getElementById('camera-container');
+        var startCameraButton = document.getElementById('start-camera');
+        var currentImage = document.getElementById('current-image');
+        var photoInput = document.getElementById("faceimage");  // เปลี่ยน id เป็น 'faceimage'
+
+        // Access the camera when "ถ่ายใหม่" is clicked
+        startCameraButton.addEventListener("click", function() {
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                    video.srcObject = stream;
+                    video.play();
+                    cameraContainer.style.display = 'block';
+                    if (currentImage) {
+                        currentImage.style.display = 'none';
+                    }
+                }).catch(function(error) {
+                    console.error("Error accessing the camera: ", error);
+                });
+            } else {
+                alert("Your browser does not support accessing the camera.");
+            }
+        });
+
+        // Take a snapshot
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+        var snap = document.getElementById("snap");
+
+        snap.addEventListener("click", function() {
+            context.drawImage(video, 0, 0, 320, 240);
+            var dataURL = canvas.toDataURL("image/png");
+            photoInput.value = dataURL;
+            canvas.style.display = 'block';
+        });
+    </script>
 </body>
 </html>

@@ -58,12 +58,68 @@ class CaptureFaceView(View):
         faceimage_data = request.POST.get('faceimage')
         return JsonResponse({'status': 'success', 'faceimage': faceimage_data})
     
+# class FaceDetectionView(View):
+#     def get(self, request):
+#         return render(request, 'face_detection.html')
+
+#     def post(self, request):
+#         faceimage_data = request.POST.get('faceimage')
+#         format, imgstr = faceimage_data.split(';base64,')
+#         ext = format.split('/')[-1]
+#         data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
+
+#         # Convert to OpenCV format
+#         nparr = np.frombuffer(data.read(), np.uint8)
+#         img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+#         # Use face_recognition to detect faces
+#         face_locations = face_recognition.face_locations(img)
+
+#         if not face_locations:
+#             return JsonResponse({'status': 'fail', 'message': 'No face detected'})
+
+#         for (top, right, bottom, left) in face_locations:
+#             face_img = img[top:bottom, left:right]
+
+#             # Encode face using face_recognition
+#             face_encoding = self.generate_face_encoding(face_img)
+
+#             all_people = Person.objects.exclude(face_encode__isnull=True)
+#             known_face_encodings = [np.frombuffer(person.face_encode, dtype=np.float64) for person in all_people]
+#             known_names = [person.name for person in all_people]
+#             known_numbers = [person.number for person in all_people]
+#             known_faceimages = [person.faceimage.url for person in all_people]
+
+#             results = face_recognition.compare_faces(known_face_encodings, face_encoding)
+#             if True in results:
+#                 match_index = results.index(True)
+#                 matched_name = known_names[match_index]
+#                 matched_number = known_numbers[match_index]
+#                 matched_faceimage = known_faceimages[match_index]
+#                 return JsonResponse({
+#                     'status': 'success',
+#                     'name': matched_name,
+#                     'number': matched_number,
+#                     'faceimage': matched_faceimage
+#                 })
+
+#         return JsonResponse({'status': 'fail', 'message': 'Unknown face'})
+
+#     def generate_face_encoding(self, image):
+#         face_encodings = face_recognition.face_encodings(image)
+#         if face_encodings:
+#             return face_encodings[0].tobytes()
+#         return None เก่า
+
 class FaceDetectionView(View):
     def get(self, request):
         return render(request, 'face_detection.html')
 
     def post(self, request):
         faceimage_data = request.POST.get('faceimage')
+        if faceimage_data is None:
+            return JsonResponse({'status': 'fail', 'message': 'No image data'})
+
         format, imgstr = faceimage_data.split(';base64,')
         ext = format.split('/')[-1]
         data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
@@ -96,6 +152,7 @@ class FaceDetectionView(View):
                 matched_name = known_names[match_index]
                 matched_number = known_numbers[match_index]
                 matched_faceimage = known_faceimages[match_index]
+
                 return JsonResponse({
                     'status': 'success',
                     'name': matched_name,
@@ -163,14 +220,34 @@ def member_list(request):
 
 def member_edit(request, pk):
     member = get_object_or_404(Person, pk=pk)
+    old_faceimage_path = member.faceimage.path if member.faceimage else None  # เก็บเส้นทางของภาพเก่า
+
     if request.method == "POST":
-        form = PersonForm(request.POST, instance=member)
+        form = PersonForm(request.POST, request.FILES, instance=member)
         if form.is_valid():
+            name = form.cleaned_data['name']
+            number = form.cleaned_data['number']
+            faceimage_data = request.POST.get('faceimage')
+            
+            if faceimage_data:
+                format, imgstr = faceimage_data.split(';base64,')
+                ext = format.split('/')[-1]
+                data = ContentFile(base64.b64decode(imgstr), name=f"{name}.{ext}")
+                
+                # อัปเดตภาพใหม่
+                member.faceimage = data
+                
+                # ลบภาพเก่า
+                if old_faceimage_path and os.path.exists(old_faceimage_path):
+                    os.remove(old_faceimage_path)
+                
+            member.save()  # ต้องบันทึกการเปลี่ยนแปลง
+            
             form.save()
             return redirect('member_list')
     else:
         form = PersonForm(instance=member)
-    return render(request, 'member_edit.html', {'form': form})
+    return render(request, 'member_edit.html', {'form': form, 'member': member})
 
 def member_delete(request, pk):
     member = get_object_or_404(Person, pk=pk)

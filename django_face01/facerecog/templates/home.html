@@ -5,18 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>HOME</title>
 </head>
 <body>
-    <!-- nav start -->
-    <nav><h1>TODAY OVERVIEW</h1>
-        TIME 11:11 PM
-    </nav>
-    <!-- nav end -->
-    <!-- footer start -->
-    <footer><h6>alpha tracking(c)</h6>
-    </footer>
-    <!-- footer end -->
     <!-- container start -->
     <div class="container">
         <!-- sidebar start -->
@@ -39,41 +31,57 @@
                 </div>
             </div>
             <div class="sidebar-menu">
-                <a href="{% url 'home' %}">หน้าหลัก</a>
-                <a href="{% url 'face_detection' %}">สแกนหน้า</a>
-                <a href="#">กล้องวงจร</a>
+                <a href="{% url 'home' %}">
+                    <i class="fa-solid fa-house"></i>
+                    หน้าหลัก
+                </a>
+                <a href="{% url 'face_detection' %}">
+                    <i class="fa-solid fa-expand"></i>
+                    สแกนหน้า
+                </a>
+                <!-- <a href="#">
+                    <i class="fa-solid fa-video"></i>
+                    กล้องวงจร
+                </a>
                 <div class="submenu">
-                    <a href="">กล้องตรวจจับ</a>
-                    <a href="">กล้องตรวจความถี่พื้นที่</a>
-                </div>
-                <a href="#">ระบบจัดการบุคคล</a>
+                    <a href=""><i class="fa-solid fa-chevron-right"></i>กล้องตรวจจับ</a>
+                    <a href=""><i class="fa-solid fa-chevron-right"></i>กล้องตรวจความถี่พื้นที่</a>
+                </div> -->
+                <a href="#">
+                    <i class="fa-regular fa-user"></i>
+                    ระบบจัดการบุคคล
+                </a>
                 <div class="submenu">
-                    <a href="">รายชื่อสมาชิก</a>
-                    <a href="">สมัครแคชเชียร์</a>
-                    <a href="">รายชื่อแคชเชียร์</a>
+                    <a href=""><i class="fa-solid fa-chevron-right"></i>รายชื่อสมาชิก</a>
+                    <a href=""><i class="fa-solid fa-chevron-right"></i>สมัครแคชเชียร์</a>
+                    <a href=""><i class="fa-solid fa-chevron-right"></i>รายชื่อแคชเชียร์</a>
                 </div>
-                <a href="">รายงานความหนาแน่น</a>
+                <a href="">
+                    <i class="fa-solid fa-chart-line"></i>
+                    รายงานความหนาแน่น
+                </a>
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
-                    <button type="submit">ออกจากระบบ</button>
+                    <button type="submit">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        ออกจากระบบ</button>
                 </form>
             </div>            
         </div>
         <!-- sidebar end -->
+        
+        
         <div class="content">
-            <!-- <h1>Welcome, {{ user.username }}</h1>
-            <p>First Name: {{ user.first_name }}</p>
-            <p>Last Name: {{ user.last_name }}</p>
-            <p>Email: {{ user.email }}</p>
-            <p>Phone Number: {{ user.phone_number }}</p>
-            <p>Role: {{ user.get_role_display }}</p>
-            {% if user.photo_profile %}
-                <img src="{{ user.photo_profile.url }}" alt="Profile Photo" style="width:200px;height:auto;">
-            {% endif %}
-            <form method="post" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit">Logout</button>
-            </form> -->
+            <!-- nav start -->
+            <nav>
+            </nav>
+            <!-- nav end -->
+            <!-- footer start -->
+            <footer><h6>alpha tracking(c)</h6>
+            </footer>
+        <div class="main">
+
+            </div>
         </div>
     </div>
     <!-- container end -->
